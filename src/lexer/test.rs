@@ -5,7 +5,7 @@ mod tests {
     use crate::token::Token::{self};
 
     fn token_test(input: &str, expected_tokens: Vec<Token>) {
-        let mut lexer = Lexer::new(input.to_string());
+        let mut lexer = Lexer::new(&input.to_string());
         for expected_token in expected_tokens {
             let token = lexer.next_token();
             assert_eq!(token, expected_token);
@@ -73,7 +73,7 @@ mod tests {
     #[test]
     fn test_lex_tokens() {
         let input = r#"let five = 5;
-        let ten = 10;
+        let ten=10;
 
         let add = fn(x, y) {
           x + y;

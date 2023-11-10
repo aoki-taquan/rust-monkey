@@ -9,7 +9,7 @@ pub struct Lexer {
 }
 
 impl Lexer {
-    pub fn new(input: String) -> Lexer {
+    pub fn new(input: &String) -> Lexer {
         let input: Vec<char> = input.chars().collect();
         match input.get(0) {
             Some(&ch) => Lexer {

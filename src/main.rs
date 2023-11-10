@@ -1,7 +1,7 @@
+mod lexer;
+mod repl;
 mod token;
-mod lexer; 
-use token::Token;
-
+use repl::ReplMode;
 
 fn main() {
     // usernameを表示
@@ -10,4 +10,6 @@ fn main() {
         "Hello {}! This is the Monkey programming language!",
         username
     );
+    let repl_mode = ReplMode::Lexre;
+    repl::start(repl_mode);
 }
