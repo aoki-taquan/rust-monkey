@@ -39,12 +39,12 @@ pub enum Expression {
     Boolean(bool),
     IntegerLiteral(i64),
     PrefixExpression {
-        operator: Operater,
+        operator: Prefix_operater,
         right: Box<Expression>,
     },
     InfixExpression {
         left: Box<Expression>,
-        operator: Operater,
+        operator: Infix_operater,
         right: Box<Expression>,
     },
     IfExpression {
@@ -142,20 +142,43 @@ fn fmt_vec<T: fmt::Display>(vec: &Vec<T>) -> String {
         .join(", ")
 }
 
-pub enum Operater {
+// TODO!:足りない
+pub enum Infix_operater {
     Plus,
     Minus,
     Asterisk,
     Slash,
+    Lt,
+    Gt,
+    Eq,
+    NotEq,
 }
 
-impl fmt::Display for Operater {
+impl fmt::Display for Infix_operater {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
-            Operater::Plus => write!(f, "+"),
-            Operater::Minus => write!(f, "-"),
-            Operater::Asterisk => write!(f, "*"),
-            Operater::Slash => write!(f, "/"),
+            Infix_operater::Plus => write!(f, "+"),
+            Infix_operater::Minus => write!(f, "-"),
+            Infix_operater::Asterisk => write!(f, "*"),
+            Infix_operater::Slash => write!(f, "/"),
+            Infix_operater::Lt => write!(f, "<"),
+            Infix_operater::Gt => write!(f, ">"),
+            Infix_operater::Eq => write!(f, "=="),
+            Infix_operater::NotEq => write!(f, "!="),
+        }
+    }   
+}
+
+pub enum Prefix_operater {
+    Bang,
+    Minus,
+}
+
+impl fmt::Display for Prefix_operater {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            Prefix_operater::Bang => write!(f, "!"),
+            Prefix_operater::Minus => write!(f, "-"),
         }
     }
 }
