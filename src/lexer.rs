@@ -28,8 +28,6 @@ impl Lexer {
     }
 
     pub fn next_token(&mut self) -> Token {
-        let token: Token;
-
         Self::sukip_white_spaces(self);
 
         let token = match self.ch {
