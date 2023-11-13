@@ -1,12 +1,13 @@
 use core::fmt;
-use std::collections::HashMap;
+use std::rc::Rc;
 
 pub type Program = Vec<Statement>;
 
+#[derive(Debug, Eq, PartialEq, Hash, Clone)]
 pub enum Statement {
     LetStatement {
         // TODO: ここは識別子のみ
-        name: Identifier,
+        name: Rc<String>,
         value: Expression,
     },
     Return {
@@ -15,9 +16,10 @@ pub enum Statement {
     Expression {
         expression: Expression,
     },
-    Block {
-        statements: Vec<Statement>,
-    },
+    // 使ってないようなのでコメントアウト
+    // Block {
+    //     statements: Vec<Statement>,
+    // },
 }
 
 impl fmt::Display for Statement {
@@ -26,13 +28,15 @@ impl fmt::Display for Statement {
             Statement::LetStatement { name, value } => write!(f, "let {} = {};", name, value),
             Statement::Return { return_value } => write!(f, "return {};", return_value),
             Statement::Expression { expression } => write!(f, "{}", expression),
-            Statement::Block { statements } => {
-                write!(f, "{}", fmt_vec(statements))
-            }
+            // 使ってないようなのでコメントアウト
+            // Statement::Block { statements } => {
+            //     write!(f, "{}", fmt_vec(statements))
+            // }
         }
     }
 }
 
+#[derive(Debug, Eq, PartialEq, Hash, Clone)]
 pub enum Expression {
     // TODO:identifierだけ切り出すかどうか
     Identifier(Identifier),
@@ -60,13 +64,19 @@ pub enum Expression {
         function: Box<Expression>,
         arguments: Vec<Expression>,
     },
-    StringLiteral(String),
+    StringLiteral(Rc<String>),
     ArrayLiteral(Vec<Expression>),
     IndexExpression {
         left: Box<Expression>,
         index: Box<Expression>,
     },
-    HashLiteral(HashMap<Box<Expression>, Box<Expression>>),
+    HashLiteral(Vec<Map>),
+}
+
+#[derive(Debug, Eq, PartialEq, Hash, Clone)]
+pub struct Map {
+    pub key: Expression,
+    pub value: Expression,
 }
 
 impl fmt::Display for Expression {
@@ -125,8 +135,8 @@ impl fmt::Display for Expression {
             }
             Expression::HashLiteral(hash) => {
                 let mut result = String::new();
-                for (k, v) in hash {
-                    result = format!("{}{}: {}, ", result, k, v);
+                for map in hash {
+                    result = format!("{}{}: {}, ", result, map.key, map.value);
                 }
                 result = format!("{{{}}}", result);
                 write!(f, "{}", result)
@@ -142,7 +152,7 @@ fn fmt_vec<T: fmt::Display>(vec: &Vec<T>) -> String {
         .join(", ")
 }
 
-
+#[derive(Debug, Eq, PartialEq, Hash, Clone)]
 pub enum InfixOperater {
     Plus,
     Minus,
@@ -166,9 +176,10 @@ impl fmt::Display for InfixOperater {
             InfixOperater::Eq => write!(f, "=="),
             InfixOperater::NotEq => write!(f, "!="),
         }
-    }   
+    }
 }
 
+#[derive(Debug, Eq, PartialEq, Hash, Clone)]
 pub enum PrefixOperater {
     Bang,
     Minus,
@@ -183,6 +194,18 @@ impl fmt::Display for PrefixOperater {
     }
 }
 
-pub type Identifier = String;
+#[derive(Debug, Eq, PartialEq, PartialOrd, Hash, Clone)]
+pub enum Precedence {
+    Lowest,
+    Equals,      // ==
+    LessGreater, // > or <
+    Sum,         // +
+    Product,     // *
+    Prefix,      // -X or !X
+    Call,        // myFunction(X)
+    Index,       // array[index]
+}
+
+pub type Identifier = Rc<String>;
 
 pub type BlockStatement = Vec<Statement>;
