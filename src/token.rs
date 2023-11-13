@@ -1,14 +1,15 @@
 use core::fmt;
+use std::rc::Rc;
 
- #[derive(PartialEq,Debug)]
+#[derive(PartialEq, Debug, Clone)]
 pub enum Token {
-    Illegal(String),
+    Illegal(Rc<String>),
     EOF,
 
     // Identifiers + literals
-    Ident(String),
+    Ident(Rc<String>),
     Int(i64),
-    String(String),
+    String(Rc<String>),
 
     // Operators
     Assign,
@@ -56,7 +57,7 @@ impl Token {
             "if" => Token::If,
             "else" => Token::Else,
             "return" => Token::Return,
-            _ => Token::Ident(ident),
+            _ => Token::Ident(Rc::new(ident)),
         }
     }
 }

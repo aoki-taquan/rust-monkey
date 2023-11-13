@@ -1,6 +1,8 @@
 use crate::token::Token;
 mod test;
+use std::rc::Rc;
 
+#[derive(Debug)]
 pub struct Lexer {
     input: Vec<char>,
     position: usize,
@@ -60,19 +62,18 @@ impl Lexer {
             ')' => Token::RParen,
             '{' => Token::LBrace,
             '}' => Token::RBrace,
-            '"' => Token::String(Self::read_string(self)),
+            '"' => Token::String(Rc::new(Self::read_string(self))),
             '[' => Token::LBracket,
             ']' => Token::RBracket,
             '\0' => Token::EOF,
             _ => {
-                // TODO:hoge9もできるようにする
                 if Self::is_letter(self.ch) {
                     let literal = Self::read_identifier(self);
                     return Token::lookup_ident(literal);
                 } else if Self::is_digit(self.ch) {
                     return Token::Int(Self::read_number(self));
                 } else {
-                    Token::Illegal(self.ch.to_string())
+                    Token::Illegal(Rc::new(self.ch.to_string()))
                 }
             }
         };
