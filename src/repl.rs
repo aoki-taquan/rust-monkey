@@ -1,11 +1,13 @@
 use crate::lexer::Lexer;
+use crate::parser::Parser;
 use crate::token::Token;
 use std::io::{self, Write};
 pub enum ReplMode {
     Lexre,
+    Parser,
 }
 
-pub fn start(reple_mode:ReplMode){
+pub fn start(reple_mode: ReplMode) {
     // ループ
     loop {
         // プロンプトを表示
@@ -19,12 +21,14 @@ pub fn start(reple_mode:ReplMode){
             ReplMode::Lexre => {
                 print_token(&input);
             }
+            ReplMode::Parser => {
+                print_ast(&input);
+            }
         }
-
     }
 }
 
-fn print_token(input: &String)  {
+fn print_token(input: &String) {
     let mut lexer = Lexer::new(input);
     loop {
         let token = lexer.next_token();
@@ -33,4 +37,12 @@ fn print_token(input: &String)  {
             return;
         }
     }
+}
+
+fn print_ast(input: &String) {
+    let lexer = Lexer::new(input);
+    let mut parser = Parser::new(lexer);
+    let program = parser.program();
+
+    println!("{:?}", program);
 }
