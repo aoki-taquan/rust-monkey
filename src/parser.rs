@@ -205,15 +205,15 @@ impl Parser {
 
     fn infix_expression(&mut self, left: Expression) -> Option<Expression> {
         let operator = match self.cur_token {
-            Token::Plus => InfixOperater::Plus,
-            Token::Minus => InfixOperater::Minus,
-            Token::Slash => InfixOperater::Slash,
-            Token::Asterisk => InfixOperater::Asterisk,
-            Token::Eq => InfixOperater::Eq,
-            Token::NotEq => InfixOperater::NotEq,
-            Token::Lt => InfixOperater::Lt,
-            Token::Gt => InfixOperater::Gt,
-            _ => panic!("cur_token is not infix operater"),
+            Token::Plus => InfixOperator::Plus,
+            Token::Minus => InfixOperator::Minus,
+            Token::Slash => InfixOperator::Slash,
+            Token::Asterisk => InfixOperator::Asterisk,
+            Token::Eq => InfixOperator::Eq,
+            Token::NotEq => InfixOperator::NotEq,
+            Token::Lt => InfixOperator::Lt,
+            Token::Gt => InfixOperator::Gt,
+            _ => panic!("cur_token is not infix operator"),
         };
 
         self.next_token();
