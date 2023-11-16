@@ -36,8 +36,6 @@ impl Parser {
                 program.push(stmt);
             }
 
-            // TODO:elseは呼ばないの？
-
             self.next_token();
         }
         program
@@ -185,8 +183,8 @@ impl Parser {
 
     fn prefix_expression(&mut self) -> Option<Expression> {
         let operator = match self.cur_token {
-            Token::Bang => PrefixOperater::Bang,
-            Token::Minus => PrefixOperater::Minus,
+            Token::Bang => PrefixOperator::Bang,
+            Token::Minus => PrefixOperator::Minus,
             _ => panic!("cur_token is not prefix operator"),
         };
 
@@ -215,10 +213,11 @@ impl Parser {
             Token::Gt => InfixOperator::Gt,
             _ => panic!("cur_token is not infix operator"),
         };
+        let precedece = self.cur_precedence();
 
         self.next_token();
 
-        let right = match self.expression(self.cur_precedence()) {
+        let right = match self.expression(precedece) {
             Some(right) => right,
             None => return None,
         };
@@ -350,7 +349,7 @@ impl Parser {
         Some(Expression::FunctionLiteral { parameters, body })
     }
 
-    fn function_parameters(&mut self) -> Option<Vec<Expression>> {
+    fn function_parameters(&mut self) -> Option<Vec<Identifier>> {
         let mut identifiers = Vec::new();
 
         if self.peek_token == Token::RParen {
@@ -360,8 +359,8 @@ impl Parser {
 
         self.next_token();
 
-        match &self.cur_token {
-            Token::Ident(name) => identifiers.push(Expression::Identifier(name.clone())),
+        match self.cur_token {
+            Token::Ident(ref name) => identifiers.push(name.clone()),
             _ => return None,
         }
 
@@ -369,8 +368,8 @@ impl Parser {
             self.next_token();
             self.next_token();
 
-            match &self.cur_token {
-                Token::Ident(name) => identifiers.push(Expression::Identifier(name.clone())),
+            match self.cur_token {
+                Token::Ident(ref name) => identifiers.push(name.clone()),
                 _ => return None,
             }
         }
@@ -397,9 +396,13 @@ impl Parser {
     }
 
     fn expression_list(&mut self, end: Token) -> Option<Vec<Expression>> {
+        match &end {
+            Token::RBrace | Token::RParen => (),
+            _ => panic!("end is not ) or }}, {:?} id not saported", end),
+        }
+
         let mut arguments = Vec::new();
-        // TODO:この実装だめ
-        // 使用上は問題ないが、バグが発生する原因になり得る
+
         if self.peek_token == end {
             self.next_token();
             return Some(arguments);
@@ -494,7 +497,7 @@ impl Parser {
                 None => return None,
             };
 
-            hash.push(Map { key, value });
+            hash.push(HashPair { key, value });
 
             if self.peek_token != Token::RBrace && self.peek_token != Token::Comma {
                 return None;

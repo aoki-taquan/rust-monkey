@@ -3,11 +3,17 @@ use std::rc::Rc;
 
 pub type Program = Vec<Statement>;
 
+pub enum Node {
+    Program(Program),
+    //　使ってないようなのでコメントアウト
+    // Statement(Statement),
+    // Expression(Expression),
+}
+
 #[derive(Debug, Eq, PartialEq, Hash, Clone)]
 pub enum Statement {
     LetStatement {
-        // TODO: ここは識別子のみ
-        name: Rc<String>,
+        name: Identifier,
         value: Expression,
     },
     Return {
@@ -38,7 +44,6 @@ impl fmt::Display for Statement {
 
 #[derive(Debug, Eq, PartialEq, Hash, Clone)]
 pub enum Expression {
-    // TODO:identifierだけ切り出すかどうか
     Identifier(Identifier),
     Boolean(bool),
     IntegerLiteral(i64),
@@ -56,8 +61,8 @@ pub enum Expression {
         consequence: BlockStatement,
         alternative: Option<BlockStatement>,
     },
-    FunctionLiteral {
-        parameters: Vec<Expression>,
+        FunctionLiteral {
+        parameters: Vec<Identifier>,
         body: BlockStatement,
     },
     CallExpression {
@@ -70,11 +75,11 @@ pub enum Expression {
         left: Box<Expression>,
         index: Box<Expression>,
     },
-    HashLiteral(Vec<Map>),
+    HashLiteral(Vec<HashPair>),
 }
 
 #[derive(Debug, Eq, PartialEq, Hash, Clone)]
-pub struct Map {
+pub struct HashPair {
     pub key: Expression,
     pub value: Expression,
 }
