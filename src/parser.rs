@@ -397,8 +397,8 @@ impl Parser {
 
     fn expression_list(&mut self, end: Token) -> Option<Vec<Expression>> {
         match &end {
-            Token::RBrace | Token::RParen => (),
-            _ => panic!("end is not ) or }}, {:?} id not saported", end),
+            Token::RBrace | Token::RParen | Token::RBracket => (),
+            _ => panic!("end is not ) or ] or }}. end is {:?}", end),
         }
 
         let mut arguments = Vec::new();
