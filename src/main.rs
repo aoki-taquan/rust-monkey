@@ -1,10 +1,10 @@
 mod ast;
+mod evaluator;
 mod lexer;
 mod object;
 mod parser;
 mod repl;
 mod token;
-mod ast;
 use repl::ReplMode;
 
 fn main() {
@@ -14,6 +14,6 @@ fn main() {
         "Hello {}! This is the Monkey programming language!",
         username
     );
-    let repl_mode = ReplMode::Parser;
+    let repl_mode = ReplMode::Eval;
     repl::start(repl_mode);
 }
