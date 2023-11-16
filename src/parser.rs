@@ -187,7 +187,7 @@ impl Parser {
         let operator = match self.cur_token {
             Token::Bang => PrefixOperater::Bang,
             Token::Minus => PrefixOperater::Minus,
-            _ => panic!("cur_token is not prefix operater"),
+            _ => panic!("cur_token is not prefix operator"),
         };
 
         self.next_token();

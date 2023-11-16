@@ -43,12 +43,12 @@ pub enum Expression {
     Boolean(bool),
     IntegerLiteral(i64),
     PrefixExpression {
-        operator: PrefixOperater,
+        operator: PrefixOperator,
         right: Box<Expression>,
     },
     InfixExpression {
         left: Box<Expression>,
-        operator: InfixOperater,
+        operator: InfixOperator,
         right: Box<Expression>,
     },
     IfExpression {
@@ -153,7 +153,7 @@ fn fmt_vec<T: fmt::Display>(vec: &Vec<T>) -> String {
 }
 
 #[derive(Debug, Eq, PartialEq, Hash, Clone)]
-pub enum InfixOperater {
+pub enum InfixOperator {
     Plus,
     Minus,
     Asterisk,
@@ -164,32 +164,32 @@ pub enum InfixOperater {
     NotEq,
 }
 
-impl fmt::Display for InfixOperater {
+impl fmt::Display for InfixOperator {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
-            InfixOperater::Plus => write!(f, "+"),
-            InfixOperater::Minus => write!(f, "-"),
-            InfixOperater::Asterisk => write!(f, "*"),
-            InfixOperater::Slash => write!(f, "/"),
-            InfixOperater::Lt => write!(f, "<"),
-            InfixOperater::Gt => write!(f, ">"),
-            InfixOperater::Eq => write!(f, "=="),
-            InfixOperater::NotEq => write!(f, "!="),
+            InfixOperator::Plus => write!(f, "+"),
+            InfixOperator::Minus => write!(f, "-"),
+            InfixOperator::Asterisk => write!(f, "*"),
+            InfixOperator::Slash => write!(f, "/"),
+            InfixOperator::Lt => write!(f, "<"),
+            InfixOperator::Gt => write!(f, ">"),
+            InfixOperator::Eq => write!(f, "=="),
+            InfixOperator::NotEq => write!(f, "!="),
         }
     }
 }
 
 #[derive(Debug, Eq, PartialEq, Hash, Clone)]
-pub enum PrefixOperater {
+pub enum PrefixOperator {
     Bang,
     Minus,
 }
 
-impl fmt::Display for PrefixOperater {
+impl fmt::Display for PrefixOperator {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
-            PrefixOperater::Bang => write!(f, "!"),
-            PrefixOperater::Minus => write!(f, "-"),
+            PrefixOperator::Bang => write!(f, "!"),
+            PrefixOperator::Minus => write!(f, "-"),
         }
     }
 }
