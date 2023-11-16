@@ -137,7 +137,6 @@ impl Lexer {
         self.input[position..self.position].iter().collect()
     }
 
-    // TODO:UTF-8に対応してもいいんじゃね
     fn is_letter(ch: char) -> bool {
         ('a' <= ch && ch <= 'z') || ('A' <= ch && ch <= 'Z') || ch == '_'
     }
